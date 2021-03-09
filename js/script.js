@@ -4,19 +4,13 @@ FSJS Project 2 - Data Pagination and Filtering
 */
 
 /*
-For assistance:
-   Check out the "Project Resources" section of the Instructions tab: https://teamtreehouse.com/projects/data-pagination-and-filtering#instructions
-   Reach out in your Slack community: https://treehouse-fsjs-102.slack.com/app_redirect?channel=unit-2
+Function creates and appends the list of students to be displayed on the page
 */
-
-/*
-Create the `showPage` function
-This function will create and insert/append the elements needed to display a "page" of nine students
-*/
+const perPage = 9;
 
 function showPage(list, page) {
-  const startIndex = page * 9 - 9;
-  const endIndex = page * 9;
+  const startIndex = page * perPage - perPage;
+  const endIndex = page * perPage;
   const studentListEl = document.querySelector(".student-list");
   studentListEl.innerHTML = "";
 
@@ -43,8 +37,38 @@ function showPage(list, page) {
 }
 
 /*
-Create the `addPagination` function
-This function will create and insert/append the elements needed for the pagination buttons
+Function creates and appends pagination buttons
 */
 
-// Call functions
+function addPagination(list) {
+  const numberOfButtons = Math.ceil(list.length / perPage);
+  const linkListEl = document.querySelector(".link-list");
+
+  linkListEl.innerHTML = "";
+
+  for (let i = 1; i <= numberOfButtons; i++) {
+    linkListEl.innerHTML += `
+      <li>
+        <button type="button">${i}</button>
+      </li>
+    `;
+  }
+  // first button given active class on load
+  linkListEl.querySelector("button").classList = "active";
+
+  //listen for clicks on pagination buttons and update current button with active class
+  const linkListButtons = linkListEl.querySelectorAll("button");
+
+  for (let j = 0; j < linkListButtons.length; j++)
+    linkListButtons[j].addEventListener("click", (e) => {
+      const activeButton = linkListEl.querySelector(".active");
+      activeButton.classList.remove("active");
+      e.target.classList.add("active");
+      const pageNumber = e.target.innerText;
+      showPage(list, pageNumber);
+    });
+}
+
+//Load page
+showPage(data, 1);
+addPagination(data);
