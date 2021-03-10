@@ -69,6 +69,55 @@ function addPagination(list) {
     });
 }
 
+// Add search bar to page
+function addSearchBar(list) {
+  const header = document.querySelector(".header");
+  const searchBar = `
+    <label for="search" class="student-search">
+      <span>Search by name</span>
+      <input id="search" placeholder="Search by name...">
+      <button type="button"><img src="img/icn-search.svg" alt="Search icon"></button>
+    </label>
+  `;
+  header.insertAdjacentHTML("beforeend", searchBar);
+  performSearch(list);
+}
+
+//Filter data based on search
+
+function performSearch(list) {
+  const search = document.querySelector("#search");
+  const filteredList = [];
+
+  for (let i = 0; i < list.length; i++) {
+    if (
+      search.value.length !== 0 &&
+      (list[i].name.first.toLowerCase().includes(search.value.toLowerCase()) ||
+        list[i].name.last.toLowerCase().includes(search.value.toLowerCase()))
+    ) {
+      filteredList.push(list[i]);
+    } else if (search.value.length === 0) {
+      filteredList.push(list[i]);
+    }
+  }
+  return filteredList;
+}
+
 //Load page
 showPage(data, 1);
 addPagination(data);
+addSearchBar(data);
+
+const searchButton = document.querySelector(".student-search button");
+
+searchButton.addEventListener("click", () => {
+  const filteredData = performSearch(data);
+  showPage(filteredData, 1);
+  addPagination(filteredData);
+});
+
+search.addEventListener("keyup", () => {
+  const filteredData = performSearch(data);
+  showPage(filteredData, 1);
+  addPagination(filteredData);
+});
