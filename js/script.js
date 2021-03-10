@@ -34,6 +34,10 @@ function showPage(list, page) {
         </li>`;
     }
   }
+  //handle no results found
+  if (list.length === 0) {
+    studentListEl.innerHTML = "No results found";
+  }
 }
 
 /*
